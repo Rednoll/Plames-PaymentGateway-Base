@@ -12,9 +12,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
 import com.inwaiders.plames.api.user.User;
+import com.inwaiders.plames.dao.EntityLink;
 import com.inwaiders.plames.domain.user.impl.UserImpl;
 import com.inwaiders.plames.modules.paygate.dao.billing.BillHighLevelRepository;
 import com.inwaiders.plames.modules.paygate.dao.billing.BillRepository;
+import com.inwaiders.plames.spring.SpringUtils;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -123,6 +125,12 @@ public abstract class BillBase implements Bill {
 	
 	public static class HighLevelRepository<T extends BillBase> extends BillHighLevelRepository<T> {
 
+		@Override
+		public EntityLink getLink(T entity) {
+			
+			return new EntityLink(SpringUtils.getEntityName(entity.getClass()), entity.getId());
+		}
+		
 		@Override
 		public T getById(Long id) {
 			
